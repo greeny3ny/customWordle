@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+	<head>
+	
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		
+		<link rel="icon" sizes="192x192" href="icons/icon.png" />
+		<link rel="apple-touch-icon" href="icons/icon.png" />
+		<link rel="shortcut icon" href="icons/weeicon.png" type="image/x-icon" />
+	
+	
+		<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+		<script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+		
+
+		<title>Craig's Custom Wordle</title>
+		<link href="styles/html5reset.css" rel="stylesheet"/>
+		<link href="styles/style.css" rel="stylesheet"/>
+	</head>
+
+	<body onload="startup()">
+	
+		<div id="div_display">
+		
+			<table id="table_letters">
+				
+				<tr>
+					<td><h1 id="h_letter0" class="letters1">-</h1></td>
+					<td><h1 id="h_letter1" class="letters1">-</h1></td>
+					<td><h1 id="h_letter2" class="letters1">-</h1></td>
+					<td><h1 id="h_letter3" class="letters1">-</h1></td>
+					<td><h1 id="h_letter4" class="letters1">-</h1></td>
+				</tr>
+				<tr>
+					<td><h1 id="h_letter5" class="letters1">-</h1></td>
+					<td><h1 id="h_letter6" class="letters1">-</h1></td>
+					<td><h1 id="h_letter7" class="letters1">-</h1></td>
+ 					<td><h1 id="h_letter8" class="letters1">-</h1></td>
+					<td><h1 id="h_letter9" class="letters1">-</h1></td>
+				</tr>
+				<tr>
+					<td><h1 id="h_letter10" class="letters1">-</h1></td>
+					<td><h1 id="h_letter11" class="letters1">-</h1></td>
+					<td><h1 id="h_letter12" class="letters1">-</h1></td>
+					<td><h1 id="h_letter13" class="letters1">-</h1></td>
+					<td><h1 id="h_letter14" class="letters1">-</h1></td>
+				</tr>
+				<tr>
+					<td><h1 id="h_letter15" class="letters1">-</h1></td>
+					<td><h1 id="h_letter16" class="letters1">-</h1></td>
+					<td><h1 id="h_letter17" class="letters1">-</h1></td>
+					<td><h1 id="h_letter18" class="letters1">-</h1></td>
+					<td><h1 id="h_letter19" class="letters1">-</h1></td>
+				</tr>
+				<tr>
+					<td><h1 id="h_letter20" class="letters1">-</h1></td>
+					<td><h1 id="h_letter21" class="letters1">-</h1></td>
+					<td><h1 id="h_letter22" class="letters1">-</h1></td>
+					<td><h1 id="h_letter23" class="letters1">-</h1></td>
+					<td><h1 id="h_letter24" class="letters1">-</h1></td>
+				</tr>
+				<tr>
+					<td><h1 id="h_letter25" class="letters1">-</h1></td>
+					<td><h1 id="h_letter26" class="letters1">-</h1></td>
+					<td><h1 id="h_letter27" class="letters1">-</h1></td>
+					<td><h1 id="h_letter28" class="letters1">-</h1></td>
+					<td><h1 id="h_letter29" class="letters1">-</h1></td>
+				</tr>
+				
+				
+			</table>
+			<table>
+			<tr>
+				<td>
+					<input type="text" id="text_input" name="name" required minlength="5" maxlength="5" size="10" spellcheck=true/>
+				</td>
+				<td><input id="h_back" type="button" value="Enter Word" onclick="menu('enterWord');" /></td>		
+			</tr>
+			<tr>
+			<td></td>
+			<td><input id="h_reset" type="button" value="Reset" onclick="menu('reset');" /></td>
+			</tr>
+			</table>
+			
+			
+		
+				
+		<!--
+			<input id="h_a0" type="button" value="0" onclick="buttonClicked(0);" />
+			<input id="h_a1" type="button" value="1" onclick="buttonClicked(1);" />
+			<input id="h_a2" type="button" value="2" onclick="buttonClicked(2);" />
+			<input id="h_a3" type="button" value="3" onclick="buttonClicked(3);" />
+		-->
+		
+		</div>
+		
+		<div id="div_score">
+		
+			<table style="width:98%">
+				<tr>
+					<td>
+						<p id="h_correct"> Correct : 0</p>
+					</td>
+					<td>
+						<p id="h_wrong">Wrong : 0</p>
+					</td>
+				</tr>
+			</table>
+		
+			
+			
+			<p id="h_difficulty">Difficulty Factor : 0</p>
+			<p id="h_score">Score : 0</p>
+			<p id="h_timer"></p>
+			
+			
+		
+		</div>
+		
+		<div id="div_menu">
+		
+			<h2 style="font-size:10vh; padding:10px">Craig's Custom Wordle</h2>
+		
+			<input id="h_m0" type="button" value="Start Wordle" onclick="menu('start');" />
+			<input id="text_wordSet" type="text" required minlength="5" maxlength="5" size="10">
+			<input id="h_m1" type="button" value="Set Word" onclick="menu('setWord');" />
+			<h1 id="h_setWord">Set word : spicy</h1>
+			
+		</div>
+
+	</body>
+		
+</html>
+
+
+<script>
+
+	var buttonsContainer = document.querySelector("#div_display");
+	var buttons = buttonsContainer.querySelectorAll("input[type=button]");
+	
+	console.log(buttons);
+	
+	var correctAnswer = 0;
+	
+	var correctNumber = 0;
+	var wrongNumber = 0;
+	
+	var difficultyFactor = 0; 
+	
+	var timer_timeSize = 0;
+	var timer_timer;
+	
+	//--------------------
+	
+	var mode = "";
+	
+	let textEntry = text_input.value;
+	var correctWord = "spicy";
+	
+	var letters = buttonsContainer.querySelectorAll(".letters1");
+	//console.log(letters);
+	
+	var wordCounter = 0;
+	var correctLetters = [false, false, false, false, false];
+
+	function startup(){
+		console.log("Loaded!");
+	
+		div_display.hidden = true;
+		div_score.hidden = true;
+		div_menu.hidden = false;
+	    
+		//var file = "wordList.txt"
+		
+		
+	
+		//generateNextQuestion();
+
+	}
+	
+	function menu(input){
+		
+		mode = input;
+		
+		switch (input){
+			case 'start':
+			div_display.hidden = false;
+			div_menu.hidden = true;
+			break;
+			case 'enterWord':
+				correctLetters = [false, false, false, false, false];
+			
+				textEntry = text_input.value;
+				
+				letters[wordCounter*5 + 0].style.backgroundColor = "#a3a3a3	";
+				letters[wordCounter*5 + 1].style.backgroundColor = "#a3a3a3	";
+				letters[wordCounter*5 + 2].style.backgroundColor = "#a3a3a3	";
+				letters[wordCounter*5 + 3].style.backgroundColor = "#a3a3a3	";
+				letters[wordCounter*5 + 4].style.backgroundColor = "#a3a3a3	";
+				
+				for (var i=0; i<5; i++){
+					
+					for (var j=0; j<5; j++){
+					
+						
+						if (correctWord.charAt(i) == textEntry[j]){
+							console.log("comparing : " + correctWord.charAt(i) + "," + textEntry[j]);
+							console.log("match at : " + i + "," + j);
+							
+							if (i == j){
+								letters[wordCounter*5 + j].style.backgroundColor = "#00ff00";
+								correctLetters[j] = [true];
+								console.log(correctLetters);
+							} else {
+								if (correctLetters[j] == false){
+									letters[wordCounter*5 + j].style.backgroundColor = "#ffff00";
+								}
+							}	
+						} else {
+							console.log("no match");
+							//letters[wordCounter*5 + j].style.backgroundColor = "#000000";
+						}
+					}
+				}
+	
+				for (var x=0; x<5; x++){
+					letters[wordCounter*5 + x].innerText = textEntry[x];
+				}
+				wordCounter ++;
+				h_correct.innerText = wordCounter;
+				
+			break;
+			case 'setWord':
+				textEntry = text_wordSet.value;
+				h_setWord.innerText = "Set word : " + textEntry;
+				correctWord = textEntry;
+			break;			
+			case 'reset':
+				resetStage();
+			break;
+			
+			
+		}
+
+		
+	}
+	
+	function generateNextQuestion(){
+	
+		//generate equation
+		var a = Math.floor(Math.random() * (10+difficultyFactor)) + 1; //1 to 10
+		var b = Math.floor(Math.random() * (10+difficultyFactor)) + 1; //1 to 10
+		
+		var operationDecider = Math.floor(Math.random() * 2); // 0 to 3
+		var operator = "+";
+		
+		switch(operationDecider){
+			case 0:
+				operator = "+";
+				correctAnswer = a+b;
+			break;
+			case 1:
+				operator = "-";
+				correctAnswer = a-b;
+			break;
+			case 2:
+				operator = "*";
+				correctAnswer = a*b;
+			break;
+			default:
+			
+		}
+		
+		h_equation.innerText = a + " " + operator + " " + b;
+		
+		//generate things for the buttons
+		
+		
+		
+		var buttonWithCorrectAnswer = Math.floor(Math.random() * 4) //0 to 3
+
+		for (var i=0; i<4; i++){
+			
+			if (i == buttonWithCorrectAnswer){
+				buttons[i].value = correctAnswer;
+			} else {
+				do{
+					var c = Math.floor(Math.random() * (correctAnswer + 5)) + (correctAnswer-5); //correct-5 to correct+5
+					buttons[i].value = c;
+				} while (c == correctAnswer);
+			}
+			
+		}
+	
+	}
+	
+	
+	function updateStats(c, w){
+	
+		h_correct.innerText = "Correct : " + c;
+		h_wrong.innerText = "Wrong : " + w;
+		
+		if (c%10 == 0){
+			difficultyFactor += 3;
+		}
+		
+		h_difficulty.innerText = "Difficulty Factor : " + difficultyFactor;
+		
+		h_score.innerText = "Score : " + ((c+difficultyFactor) - w);
+	
+	}
+	
+	function timer(){
+	
+		if (timer_timeSize > 0){
+			timer_timeSize --;
+			h_timer.innerText = "Timer : " + timer_timeSize;
+			console.log(timer_timeSize);
+		} else {
+			enableButtons(false);
+		}
+		
+	
+	}
+	
+	function enableButtons(status){
+	
+		for (var i=0; i<4; i++){
+			buttons[i].disabled = !status;
+		}
+	
+	}
+	
+	function resetStage(){
+	
+		wordCounter = 0;
+		//correctWord = "xxxxx";
+		correctLetters = [false, false, false, false, false];
+		h_correct.innerText = wordCounter;
+		
+		div_display.hidden = true;
+		div_menu.hidden = false;
+
+		for (var x=0; x<letters.length; x++){
+			letters[x].innerText = "-";
+			letters[x].style.backgroundColor = "#ffffff";
+		}
+	
+		console.log("resetting");
+	}
+	
+	function buttonClicked(x){
+	
+		if (buttons[x].value == correctAnswer){
+			correctNumber ++;
+			//generate next stuff
+			
+			if (mode == 'endurance'){
+				timer_timeSize += 3;
+			}
+			
+		} else {
+			wrongNumber ++;
+			if (difficultyFactor > 0){		
+				difficultyFactor -= 1;
+			}
+			
+			if (mode == 'endurance'){
+				timer_timeSize -= 6;
+			}
+			if (mode == 'onelife'){
+				timer_timeSize = 0;
+				h_timer.innerText = "Timer : 0";
+			}
+			
+		}
+		
+		generateNextQuestion();
+		updateStats(correctNumber, wrongNumber);
+	
+	}
+	
+	
+	var wordList1 = []
+	
+	
+	
+	
+	
+	
+</script>
